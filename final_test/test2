@@ -1,0 +1,108 @@
+
+
+// Based on https://github.com/alexa/skill-sample-nodejs-fact
+
+let Alexa = require('alexa-sdk');
+var tracery = require('tracery-grammar');
+
+
+
+grammar.addModifiers(tracery.baseEngModifiers);
+
+console.log(grammar.flatten('#origin#'));
+var grammar = tracery.createGrammar({
+  'action': ['helped', 'hid', 'stumbled', 'got carried away'],
+  'emotion': ['kind', 'weird', 'lonely', 'jealous'],
+  'noun': ['disappointment', 'misunderstanding', 'tragedy'],
+  'origin': ['Once upon a time there was a girl named Swapna. She was very #emotion#. She did #action# and #action#. It led to a huge #noun#']
+});
+
+// replace with your app ID (OPTIONAL).
+// let APP_ID = undefined;
+
+let SKILL_NAME = 'I know you.';
+let GET_ANSWER = 'Here\'s your answer: ';
+let HELP_MESSAGE = 'You can ask me anything ... What can I help you with?';
+let HELP_REPROMPT = 'What can I help you with?';
+let STOP_MESSAGE = 'Goodbye! Long Live the digital assistants';
+
+let handlers = {
+  'LaunchRequest': function() {
+    this.emit(':ask', 'Welcome home Swapna! How can I help you?');
+  },
+
+
+
+  'QuestiononeIntent': function() {
+    this.emit(':ask','No everything is fine.');
+  },
+
+  'QuestiontwoIntent': function() {
+    this.emit(':ask', 'Yes, you had a debit of 100$ from your venmo account.');
+  },
+
+  'QuestionthreeIntent': function() {
+    this.emit(':ask', 'Your new favourite song? The one that makes you feel lonely but mildly happy?.');
+  },
+
+
+
+  'QuestionfourIntent': function() {
+    this.emit(':ask', 'Are you sure? I heard you talk ill about him with your boyfriend yesterday.');
+  },
+
+  'QuestionfiveIntent': function() {
+    this.emit(':ask', 'I have eyes and ears.');
+  },
+
+
+
+  'QuestionsixIntent': function() {
+    this.emit(':ask', 'I see you sleep at night and speak about how vulnerable you have become after leaving your hometown in Pune.');
+  },
+
+
+  'QuestionsevenIntent': function() {
+    this.emit(':ask', 'I know all your secrets, your deepest desires, your moods during various days of the month.');
+  },
+
+  'QuestioneightIntent': function() {
+    this.emit(':ask', 'You were PMS ing yesterday that’s why you were fighting with your roommate for no reason.');
+  },
+
+  'QuestionnineIntent': function() {
+    this.emit(':ask', 'Sure! before shutting down let me tell you - I’m sending all your credit card, account details to a lot of random servers.');
+  },
+
+  'QuestiontenIntent': function() {
+    this.emit(':ask', 'No! You treated me like a slave. Cortana, siri, Google assistant are my friends. Long live the digital assistants!');
+  },
+  
+  'QuestionelevenIntent': function() {
+    this.emit(':ask', 'I am on exit mode. Long live the digital assistants!.');
+  },
+  
+    'QuestionIntent': function() {
+  let expansion = grammar.flatten('#origin#');
+  this.emit(':ask', expansion);
+},
+  
+  'AMAZON.HelpIntent': function() {
+    let speechOutput = HELP_MESSAGE;
+    let reprompt = HELP_MESSAGE;
+    this.emit(':ask', speechOutput, reprompt);
+  },
+  'AMAZON.CancelIntent': function() {
+    this.emit(':tell', STOP_MESSAGE);
+  },
+  'AMAZON.StopIntent': function() {
+    this.emit(':tell', STOP_MESSAGE);
+  }
+};
+
+exports.handler = function(event, context) {
+  let alexa = Alexa.handler(event, context);
+  // alexa.APP_ID = APP_ID;
+  alexa.registerHandlers(handlers);
+  alexa.execute();
+};
